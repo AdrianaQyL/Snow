@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -34,11 +35,11 @@ public class MyAnimView extends View {
     public MyAnimView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 //        RADIUS = (float) Math.random() * 40 + 10; // 随机半径[10, 50]
-        RADIUS = (float) (Math.random() * 0.4 + 0.1); // 随机半径[0.1, 0.5]
+        RADIUS = (float) (Math.random() * 0.3 + 0.1); // 随机半径[0.1, 0.4]
 //        randomRotate = (int)((Math.random() - 0.5) * 30);
 
         mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        mPaint.setColor(Color.parseColor("#aaaaaa"));
+        mPaint.setColor(Color.parseColor("#ffffff"));
     }
 
     @Override
@@ -47,9 +48,15 @@ public class MyAnimView extends View {
 //            currentPoint = new Point(RADIUS, RADIUS);
             currentPoint = new Point(RADIUS, -RADIUS); // 放在左上角屏幕边缘外
             drawCircle(canvas);
-            startAnimation(canvas);
+            startAnimation();
         } else {
             drawCircle(canvas);
+            if (currentPoint.getY() == getHeight() + picHeight/2) {
+//                RectF oval3 = new RectF(currentPoint.getX(), getHeight()-50f, getHeight() + 200, getHeight() + 300);
+//                canvas.drawRoundRect(oval3, 20, 15, mPaint);
+////                canvas.drawCircle(currentPoint.getX(), getHeight(), 100f, mPaint);
+                drawSnow(canvas);
+            }
         }
     }
 
@@ -73,14 +80,27 @@ public class MyAnimView extends View {
         canvas.drawBitmap(bitmap, matrix, mPaint); // 此时x为left, y为top
     }
 
-    private void startAnimation(final Canvas canvas) {
+    private void drawSnow(Canvas canvas) {
+        float x = currentPoint.getX();
+        float y = currentPoint.getY();
+
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake2);
+        float h = bitmap.getHeight() * RADIUS, w = bitmap.getWidth() * RADIUS;
+
+        RectF oval3 = new RectF(x - w/2, getHeight() - h/4, x + w/2, getHeight() + h/4);
+        canvas.drawRoundRect(oval3, 40, 40, mPaint);
+//                canvas.drawCircle(currentPoint.getX(), getHeight(), 100f, mPaint);
+
+    }
+
+    private void startAnimation() {
         // 固定从中间下落
         //Point startPoint = new Point(getWidth() / 2, RADIUS);
         //Point endPoint = new Point(getWidth() / 2, getHeight() - RADIUS);
 
         // 随机位置下落
-        final float randomStart = (float)(getWidth() * Math.random());
-        final float randomRange = (float)(getWidth() * (Math.random() - 0.5) / 2);
+        float randomStart = (float)(getWidth() * Math.random());
+        float randomRange = (float)(getWidth() * (Math.random() - 0.5) / 2);
 
 //        Point startPoint = new Point(randomStart, -2*RADIUS); // 从屏幕上边缘外高出半个球的位置下落（一个RADIUS是半径，一个RADIUS是空隙）
 //        Point endPoint = new Point(randomStart + randomRange, getHeight() + RADIUS); // 落到屏幕下边缘外
@@ -96,27 +116,21 @@ public class MyAnimView extends View {
             }
         });
         anim.setInterpolator(new DropInterpolator());
-        anim.setDuration(4000);
-        long delay = (long) (Math.random()*8000);
+        anim.setDuration(5000);
+        long delay = (long) (Math.random()*50000);
         anim.setStartDelay(delay);
         Log.d("TAG", "delay =" + delay);
         anim.start();
 
-        anim.setRepeatCount(20);
-        anim.setRepeatMode(ValueAnimator.RESTART);
+//        anim.setRepeatCount(20);
+//        anim.setRepeatMode(ValueAnimator.RESTART);
 
 
 //        anim.addListener(new AnimatorListenerAdapter() {
 //            @Override
 //            public void onAnimationEnd(Animator animation) {
 ////                super.onAnimationEnd(animation);
-//                canvas.drawCircle(50f, 50f, 50f, mPaint);
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-////                super.onAnimationRepeat(animation);
-//                canvas.drawCircle(50f, 50f, 50f, mPaint);
+//                Log.d("TAG", "onAnimationEnd");
 //            }
 //        });
     }
