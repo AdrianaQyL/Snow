@@ -133,5 +133,7 @@ public class MyAnimView extends View {
 //                Log.d("TAG", "onAnimationEnd");
 //            }
 //        });
+
+        // 上次提交帐号错了
     }
 }
