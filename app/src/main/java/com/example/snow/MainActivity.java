@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
     private androidx.constraintlayout.widget.ConstraintLayout mLayout;
 
+    public static final long startTime = System.currentTimeMillis();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 //        View ballView = inflater.inflate(R.layout.drop, null);
 //        mLayout.addView(ballView);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 500; i++) {
             mLayout.addView(inflater.inflate(R.layout.drop, null));
         }
     }

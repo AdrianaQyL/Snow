@@ -19,6 +19,8 @@ import android.view.animation.BounceInterpolator;
 
 import androidx.annotation.Nullable;
 
+import static com.example.snow.MainActivity.startTime;
+
 public class MyAnimView extends View {
 
     public float RADIUS;
@@ -87,7 +89,10 @@ public class MyAnimView extends View {
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.snowflake2);
         float h = bitmap.getHeight() * RADIUS, w = bitmap.getWidth() * RADIUS;
 
-        RectF oval3 = new RectF(x - w/2, getHeight() - h/4, x + w/2, getHeight() + h/4);
+        Log.d("time", "here " + Math.sqrt(System.currentTimeMillis() - startTime));
+        Log.d("top", "now " + (getHeight() - h/4));
+
+        RectF oval3 = new RectF(x - w/2, (float)(getHeight() - h/4 + Math.sqrt(System.currentTimeMillis() - startTime) * RADIUS * 1.5), x + w/2, (float)(getHeight() + h/4 - Math.sqrt(System.currentTimeMillis() - startTime) * RADIUS * 1.5));
         canvas.drawRoundRect(oval3, 40, 40, mPaint);
 //                canvas.drawCircle(currentPoint.getX(), getHeight(), 100f, mPaint);
 
@@ -117,7 +122,7 @@ public class MyAnimView extends View {
         });
         anim.setInterpolator(new DropInterpolator());
         anim.setDuration(5000);
-        long delay = (long) (Math.random()*50000);
+        long delay = (long) (Math.random()*100000);
         anim.setStartDelay(delay);
         Log.d("TAG", "delay =" + delay);
         anim.start();
